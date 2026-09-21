@@ -53,53 +53,53 @@
 
 ## 📁 Структура проекта
 
+```
 Tg/
-├── Handlers/ # Обработчики (роутеры)
-│ ├── start.py # /start
-│ ├── info.py # "О нас"
-│ ├── Catalog.py # Каталог и покупка
-│ ├── profile.py # Профиль и заказы
-│ └── admin.py # Админ-панель
+├── Handlers/              # Обработчики (роутеры)
+│   ├── start.py          # /start
+│   ├── info.py           # "О нас"
+│   ├── Catalog.py        # Каталог и покупка
+│   ├── profile.py        # Профиль и заказы
+│   └── admin.py          # Админ-панель
 │
-├── database/ # Работа с БД
-│ ├── models/ # SQLAlchemy модели
-│ │ ├── user.py
-│ │ ├── category.py
-│ │ ├── item.py
-│ │ └── order.py
-│ └── init.py # Экспорт моделей
+├── database/              # Работа с БД
+│   ├── models/           # SQLAlchemy модели
+│   │   ├── user.py
+│   │   ├── category.py
+│   │   ├── item.py
+│   │   └── order.py
+│   └── __init__.py       # Экспорт моделей
 │
-├── repositories/ # CRUD-репозитории
-│ ├── user.py
-│ ├── categories.py
-│ ├── item.py
-│ └── order.py
+├── repositories/          # CRUD-репозитории
+│   ├── user.py
+│   ├── categories.py
+│   ├── item.py
+│   └── order.py
 │
-├── keyboards/ # Inline / Reply клавиатуры
-│ ├── menu.py
-│ ├── catalog.py
-│ ├── profile.py
-│ └── admin.py
+├── keyboards/             # Inline / Reply клавиатуры
+│   ├── menu.py
+│   ├── catalog.py
+│   ├── profile.py
+│   └── admin.py
 │
-├── filters/ # Кастомные фильтры
-│ ├── is_admin.py # Проверка админа
-│ └── check_buy_item.py # Проверка баланса
+├── filters/               # Кастомные фильтры
+│   ├── is_admin.py       # Проверка админа
+│   └── check_buy_item.py # Проверка баланса
 │
-├── middlewares/ # Middleware
-│ └── session.py # Сессия БД в data
+├── middlewares/           # Middleware
+│   └── session.py        # Сессия БД в data
 │
-├── states/ # FSM-состояния
-│ └── profile.py
+├── states/                # FSM-состояния
+│   └── profile.py
 │
-├── utils/ # Утилиты
-│ └── notify.py # Уведомления админу
+├── utils/                 # Утилиты
+│   └── notify.py         # Уведомления админу
 │
-├── main.py # Точка входа
-├── .env # Токены (не в Git!)
+├── main.py                # Точка входа
+├── .env                   # Токены (не в Git!)
 ├── .gitignore
 └── requirements.txt
-
-
+```
 ---
 
 ## ⚙️ Быстрый старт
