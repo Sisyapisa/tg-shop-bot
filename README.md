@@ -52,3 +52,155 @@
 ---
 
 ## 📁 Структура проекта
+
+Tg/
+├── Handlers/ # Обработчики (роутеры)
+│ ├── start.py # /start
+│ ├── info.py # "О нас"
+│ ├── Catalog.py # Каталог и покупка
+│ ├── profile.py # Профиль и заказы
+│ └── admin.py # Админ-панель
+│
+├── database/ # Работа с БД
+│ ├── models/ # SQLAlchemy модели
+│ │ ├── user.py
+│ │ ├── category.py
+│ │ ├── item.py
+│ │ └── order.py
+│ └── init.py # Экспорт моделей
+│
+├── repositories/ # CRUD-репозитории
+│ ├── user.py
+│ ├── categories.py
+│ ├── item.py
+│ └── order.py
+│
+├── keyboards/ # Inline / Reply клавиатуры
+│ ├── menu.py
+│ ├── catalog.py
+│ ├── profile.py
+│ └── admin.py
+│
+├── filters/ # Кастомные фильтры
+│ ├── is_admin.py # Проверка админа
+│ └── check_buy_item.py # Проверка баланса
+│
+├── middlewares/ # Middleware
+│ └── session.py # Сессия БД в data
+│
+├── states/ # FSM-состояния
+│ └── profile.py
+│
+├── utils/ # Утилиты
+│ └── notify.py # Уведомления админу
+│
+├── main.py # Точка входа
+├── .env # Токены (не в Git!)
+├── .gitignore
+└── requirements.txt
+
+
+---
+
+## ⚙️ Быстрый старт
+
+### 1. Клонируй репозиторий
+
+```bash
+git clone https://github.com/Sisyapisa/tg-shop-bot.git
+cd tg-shop-bot
+
+```
+
+### 2. Создай виртуальное окружение
+
+```bash
+python -m venv venv
+
+# Windows:
+venv\Scripts\activate
+
+# Linux / Mac:
+source venv/bin/activate
+```
+
+### 3. Установи зависимости
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Создай `.env`
+
+```env
+BOT_TOKEN=твой_токен_от_BotFather
+ADMIN_ID=твой_telegram_id
+```
+
+**Где взять:**
+- `BOT_TOKEN` — [@BotFather](https://t.me/BotFather) → `/newbot`
+- `ADMIN_ID` — [@userinfobot](https://t.me/userinfobot)
+
+### 5. Запусти
+
+```bash
+python main.py
+```
+
+---
+
+## 📸 Скриншоты
+
+| Каталог | Карточка товара |
+|---------|-----------------|
+| ![](screenshots/catalog.png) | ![](screenshots/item.png) |
+
+| Профиль | Админ-панель |
+|---------|--------------|
+| ![](screenshots/profile.png) | ![](screenshots/admin.png) |
+
+---
+
+## 🎯 Что можно добавить
+
+- [ ] Интеграция с **ЮKassa** (реальная оплата)
+- [ ] **Корзина** (несколько товаров в заказе)
+- [ ] **CRUD товаров** через админку
+- [ ] **Пагинация** в заказах и юзерах
+- [ ] **Промокоды** и скидки
+- [ ] **Webhook** вместо polling
+
+---
+
+## 💼 Для чего подходит
+
+Этот бот — **готовое решение** для:
+
+- 🛍 **Интернет-магазинов** в Telegram
+- 🎁 **Продажи цифровых товаров**
+- 🍕 **Доставки еды**
+- 👟 **Магазинов одежды / обуви**
+- 📚 **Продажи курсов / книг**
+
+**Легко адаптируется** под любой бизнес: меняешь категории и товары в БД — и бот готов.
+
+---
+
+## 👨‍💻 Автор
+
+**Матвей** — Python-разработчик Telegram-ботов
+
+- 📱 Telegram: [@pipapupapipu]
+- 💻 GitHub: [@Sisyapisa](https://github.com/Sisyapisa)
+
+**Нужен бот?** Пиши в Telegram — обсудим!
+
+---
+
+## 📄 Лицензия
+
+MIT — используй **свободно**, в том числе **в коммерческих целях**.
+
+---
+
+⭐ **Понравился проект?** Поставь звезду на GitHub!
