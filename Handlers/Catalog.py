@@ -1,6 +1,10 @@
 from aiogram import F, Router, types, Bot
+from aiogram.exceptions import TelegramBadRequest
+
+import keyboards
 from filters.check_buy_item import FilterUserCanBuyItem
 from keyboards.catalog import generate_catalog_kb, CategoryCBData,generate_items_kb,ItemCBData,back_to_category_items,BuyItemCBData
+from repositories import categories
 from repositories.categories import CategoryRepo
 from repositories.item import ItemRepo
 from repositories.order import OrderRepo
@@ -23,10 +27,21 @@ async def catalog_msg(message: types.Message, category_repo: CategoryRepo):
 @router.callback_query(F.data == "catalog")
 async def catalog_cb(callback: types.CallbackQuery, category_repo: CategoryRepo):
     categories = await category_repo.get_list()
-    await callback.message.edit_text(
-        "Наш каталог:",
-        reply_markup=generate_catalog_kb(categories),
-    )
+    text = "Наш каталог:"
+    keyboard = generate_catalog_kb(categories)
+
+    if callback.message.photo:
+        try:
+            await callback.message.delete()
+        except TelegramBadRequest:
+            pass
+        await callback.message.answer(text, reply_markup=keyboard)
+    else:
+        try:
+            await callback.message.edit_text(text, reply_markup=keyboard)
+        except TelegramBadRequest:
+            pass
+    await callback.answer()
 
 @router.callback_query(CategoryCBData.filter())
 async def catalog_info(
@@ -41,11 +56,24 @@ async def catalog_info(
         return
 
     items = await item_repo.get_item(callback_data.category_id)
+    keyboard = generate_items_kb(items)
+    text = category.description
 
-    await callback.message.edit_text(
-        text=category.description,
-        reply_markup=generate_items_kb(items)
-    )
+    if callback.message.photo:
+        try:
+            await callback.message.delete()
+        except TelegramBadRequest:
+            pass
+        await callback.message.answer(text, reply_markup=keyboard)
+    else:
+        try:
+            await callback.message.edit_text(text, reply_markup=keyboard)
+        except TelegramBadRequest as e:
+            if "message is not modified" not in str(e):
+                raise
+
+    await callback.answer()
+
 
 @router.callback_query(ItemCBData.filter())
 async def item_info(callback: types.CallbackQuery,callback_data: ItemCBData, item_repo: ItemRepo):
@@ -54,13 +82,38 @@ async def item_info(callback: types.CallbackQuery,callback_data: ItemCBData, ite
         await callback.answer("Товар не найден", show_alert=True)
         return
 
-    await callback.message.edit_text(
+    text =(
         f"Название - {item.name}\n"
         f"Описание - {item.description}\n"
         f"Стоимость - {round(item.price / 100, 2)} монет\n"
-        "Хотите приобрести?",
-        reply_markup=back_to_category_items(item.id, item.category_id)
+        "Хотите приобрести?"
     )
+    keyboard = back_to_category_items(item.id, item.category_id)
+
+    if item.photo:
+        try:
+            await callback.message.delete()
+        except TelegramBadRequest:
+            pass
+
+        try:
+            await callback.message.answer_photo(
+                photo=item.photo,
+                caption=text,
+                parse_mode="html",
+                reply_markup=keyboard
+            )
+        except TelegramBadRequest:
+            try:
+                await callback.message.answer(text,parse_mode="html", reply_markup=keyboard)
+            except TelegramBadRequest:
+                pass
+    else:
+        try:
+            await callback.message.edit_text(text,parse_mode="html", reply_markup=keyboard)
+        except TelegramBadRequest:
+            pass
+    await callback.answer()
 
 @router.callback_query(BuyItemCBData.filter(), FilterUserCanBuyItem())
 async def buy_item(

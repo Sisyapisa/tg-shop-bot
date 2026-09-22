@@ -10,5 +10,6 @@ class Item(BaseModel):
     name: Mapped[str]
     description: Mapped[str]
     price: Mapped[int] # 1$ = 100
+    photo: Mapped[str | None] = mapped_column()
 
     category_id: Mapped[int] = mapped_column(ForeignKey('categories.id'))
