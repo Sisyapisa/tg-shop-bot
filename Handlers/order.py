@@ -1,11 +1,7 @@
 from aiogram import types, F, Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from os import getenv
 
-from telebot.apihelper import answer_web_app_query
-
-from database import Order
 from repositories.item import ItemRepo
 from repositories.order import OrderRepo
 from repositories.user import UserRepo
