@@ -16,3 +16,28 @@ class ItemRepo:
     async def get_item_id(self, item_id):
         statement = select(Item).where(Item.id == item_id)
         return (await self.__session.scalar(statement))
+
+    async def create_item(
+            self,
+            name: str,
+            description: str,
+            price: int,
+            photo:str|None,
+            category_id: int
+    ):
+        item = Item(
+            name=name,
+            description=description,
+            price=price,
+            photo=photo,
+            category_id=category_id
+        )
+        self.__session.add(item)
+        await self.__session.commit()
+        return item
+
+    async def delete_item(self, item_id: int):
+        item = await self.get_item_id(item_id)
+        if item:
+            await self.__session.delete(item)
+            await self.__session.commit()

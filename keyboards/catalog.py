@@ -53,7 +53,7 @@ def back_to_category_items(item_id, category_id):
         inline_keyboard=[
             [InlineKeyboardButton(
                 text="Купить",
-                callback_data = BuyItemCBData(id=item_id).pack()
+                callback_data = f"start_order:{item_id}"
             )],
             [
                 InlineKeyboardButton(

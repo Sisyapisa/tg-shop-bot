@@ -57,3 +57,34 @@ class OrderRepo:
         )
         result = await self.__session.execute(statement)
         return result.one()
+
+    async def create_order_with_details(
+            self,
+            user_id: int,
+            item,
+            customer_name: str,
+            customer_phone: str,
+            delivery_address: str,
+            quantity: int = 1,
+    ) -> Order:
+        order = Order(
+            user_id = user_id,
+            total = item.price * quantity,
+            status = "paid",
+            customer_name = customer_name,
+            customer_phone = customer_phone,
+            delivery_address = delivery_address
+        )
+        self.__session.add(order)
+        await self.__session.flush()
+
+        order_item = OrderItem(
+            order_id = order.id,
+            item_id = item.id,
+            item_name = item.name,
+            price = item.price,
+            quantity = quantity
+        )
+        self.__session.add(order_item)
+        await self.__session.commit()
+        return order

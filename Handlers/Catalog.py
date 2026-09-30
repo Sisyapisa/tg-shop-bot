@@ -115,43 +115,43 @@ async def item_info(callback: types.CallbackQuery,callback_data: ItemCBData, ite
             pass
     await callback.answer()
 
-@router.callback_query(BuyItemCBData.filter(), FilterUserCanBuyItem())
-async def buy_item(
-        callback: types.CallbackQuery,
-        callback_data: BuyItemCBData,
-        item_repo: ItemRepo,
-        user_repo: UserRepo,
-        order_repo: OrderRepo,
-        bot: Bot
-):
-    item = await item_repo.get_item_id(callback_data.id)
-    if not item:
-        await callback.answer("Товар не найден", show_alert=True)
-        return
-
-    user = await user_repo.get_user_by_tg_id(callback.from_user.id)
-    if not user:
-        await callback.answer("Пользователь не найден", show_alert=True)
-        return
-
-    await user_repo.update_balance(callback.from_user.id, -item.price)
-
-    order = await order_repo.create_order(
-        user_id = user.id,
-        item = item
-    )
-
-    await callback.message.answer(
-        f"Вы купили: {item.name}\n"
-        f"Списано: {round(item.price / 100, 2)} монет"
-    )
-    await callback.answer()
-
-    admin_id = int(getenv("ADMIN_ID",0))
-    await notify_admin(
-        bot,admin_id,
-        f"Новый заказ #{order.id}\n\n"
-        f"{user.full_name}(@{user.username or 'Нет'})\n"
-        f"{item.name}\n"
-        f"{round(item.price/100,2)} монет"
-    )
+# @router.callback_query(BuyItemCBData.filter(), FilterUserCanBuyItem())
+# async def buy_item(
+#         callback: types.CallbackQuery,
+#         callback_data: BuyItemCBData,
+#         item_repo: ItemRepo,
+#         user_repo: UserRepo,
+#         order_repo: OrderRepo,
+#         bot: Bot
+# ):
+#     item = await item_repo.get_item_id(callback_data.id)
+#     if not item:
+#         await callback.answer("Товар не найден", show_alert=True)
+#         return
+#
+#     user = await user_repo.get_user_by_tg_id(callback.from_user.id)
+#     if not user:
+#         await callback.answer("Пользователь не найден", show_alert=True)
+#         return
+#
+#     await user_repo.update_balance(callback.from_user.id, -item.price)
+#
+#     order = await order_repo.create_order(
+#         user_id = user.id,
+#         item = item
+#     )
+#
+#     await callback.message.answer(
+#         f"Вы купили: {item.name}\n"
+#         f"Списано: {round(item.price / 100, 2)} монет"
+#     )
+#     await callback.answer()
+#
+#     admin_id = int(getenv("ADMIN_ID",0))
+#     await notify_admin(
+#         bot,admin_id,
+#         f"Новый заказ #{order.id}\n\n"
+#         f"{user.full_name}(@{user.username or 'Нет'})\n"
+#         f"{item.name}\n"
+#         f"{round(item.price/100,2)} монет"
+#     )

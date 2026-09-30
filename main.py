@@ -1,5 +1,6 @@
 from aiogram import Bot, Dispatcher
 import asyncio
+from pathlib import Path
 from Handlers import register_router
 from database.models import BaseModel
 from middlewares import register_middleware
@@ -9,9 +10,13 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from os import getenv
 from dotenv import load_dotenv
 
-load_dotenv()
+from dotenv import dotenv_values
 
-TOKEN = getenv("BOT_TOKEN")
+env_path = Path(__file__).parent / ".env"
+config = dotenv_values(env_path)
+
+
+TOKEN = config.get("BOT_TOKEN")
 
 if not TOKEN:
     raise RuntimeError("BOT_TOKEN не задан в .env")

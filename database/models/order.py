@@ -12,6 +12,10 @@ class Order(BaseModel):
     status: Mapped[str] = mapped_column(default='pending')
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
+    customer_name: Mapped[str | None] = mapped_column()
+    customer_phone: Mapped[str | None] = mapped_column()
+    delivery_address: Mapped[str | None] = mapped_column()
+
     items: Mapped[list["OrderItem"]] = relationship(back_populates='order', cascade = 'all, delete-orphan')
 
 class OrderItem(BaseModel):
